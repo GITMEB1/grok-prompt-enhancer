@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "Grok Prompt Enhancer",
+  "version": "1.0.0",
+  "description": "Enhance your Grok prompts with AI-powered improvements for better responses",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://grok.com/*",
+    "https://*.vercel.app/*",
+    "https://*.netlify.app/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://grok.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Grok Prompt Enhancer Settings",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*"],
+      "matches": ["https://grok.com/*"]
+    }
+  ],
+  "author": "Cursor AI",
+  "homepage_url": "https://github.com/your-username/grok-prompt-enhancer"
+} 
