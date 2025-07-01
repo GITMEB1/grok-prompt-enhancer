@@ -1,31 +1,9 @@
 {
   "version": 2,
-  "name": "grok-prompt-enhancer-backend",
   "builds": [
     {
       "src": "app.js",
       "use": "@vercel/node"
     }
-  ],
-  "routes": [
-    {
-      "src": "/health",
-      "dest": "app.js"
-    },
-    {
-      "src": "/enhance",
-      "dest": "app.js"
-    },
-    {
-      "src": "/",
-      "dest": "app.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "app.js"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
