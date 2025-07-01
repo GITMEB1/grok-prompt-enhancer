@@ -64,7 +64,8 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     environment: NODE_ENV,
     version: '1.0.0',
-    openrouter: !!OPENROUTER_API_KEY
+    openrouter: !!OPENROUTER_API_KEY,
+    message: 'Health check working correctly'
   });
 });
 

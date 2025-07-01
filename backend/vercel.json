@@ -9,6 +9,18 @@
   ],
   "routes": [
     {
+      "src": "/health",
+      "dest": "app.js"
+    },
+    {
+      "src": "/enhance",
+      "dest": "app.js"
+    },
+    {
+      "src": "/",
+      "dest": "app.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "app.js"
     }
