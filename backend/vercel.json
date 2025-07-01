@@ -9,19 +9,8 @@
   ],
   "routes": [
     {
-      "src": "/health",
-      "dest": "app.js",
-      "methods": ["GET"]
-    },
-    {
-      "src": "/enhance",
-      "dest": "app.js",
-      "methods": ["POST"]
-    },
-    {
-      "src": "/",
-      "dest": "app.js",
-      "methods": ["GET"]
+      "src": "/(.*)",
+      "dest": "app.js"
     }
   ],
   "env": {
