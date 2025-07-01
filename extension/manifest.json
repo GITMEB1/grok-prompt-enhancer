@@ -9,12 +9,20 @@
   ],
   "host_permissions": [
     "https://grok.com/*",
+    "https://*.grok.com/*",
+    "https://x.com/*",
+    "https://*.x.com/*",
     "https://*.vercel.app/*",
     "https://*.netlify.app/*"
   ],
   "content_scripts": [
     {
-      "matches": ["https://grok.com/*"],
+      "matches": [
+        "https://grok.com/*",
+        "https://*.grok.com/*",
+        "https://x.com/*",
+        "https://*.x.com/*"
+      ],
       "js": ["content.js"],
       "run_at": "document_end"
     }
@@ -26,7 +34,12 @@
   "web_accessible_resources": [
     {
       "resources": ["icons/*"],
-      "matches": ["https://grok.com/*"]
+      "matches": [
+        "https://grok.com/*",
+        "https://*.grok.com/*",
+        "https://x.com/*",
+        "https://*.x.com/*"
+      ]
     }
   ],
   "author": "Cursor AI",
