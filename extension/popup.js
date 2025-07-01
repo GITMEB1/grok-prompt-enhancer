@@ -6,8 +6,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Model information for tooltips
   const modelInfo = {
-    'deepseek/deepseek-coder:33b-instruct': {
-      name: 'DeepSeek Coder 33B',
+    'deepseek/deepseek-r1': {
+      name: 'DeepSeek R1',
+      description: 'Latest DeepSeek model with advanced reasoning capabilities',
+      speed: 'Fast',
+      cost: 'Low'
+    },
+    'deepseek/deepseek-coder': {
+      name: 'DeepSeek Coder',
       description: 'Specialized for coding tasks, great for technical prompts',
       speed: 'Fast',
       cost: 'Low'

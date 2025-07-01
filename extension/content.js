@@ -170,7 +170,7 @@
   async function getSelectedModel() {
     return new Promise(resolve => {
       chrome.storage.sync.get('selectedModel', data => {
-        resolve(data.selectedModel || 'deepseek/deepseek-coder:33b-instruct');
+        resolve(data.selectedModel || 'deepseek/deepseek-r1');
       });
     });
   }
