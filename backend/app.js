@@ -82,7 +82,6 @@ app.get('/', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
-
 // Main enhancement endpoint
 app.post('/enhance', validateEnhancementRequest, async (req, res) => {
   const { prompt, model, enhancementType } = req.body;
