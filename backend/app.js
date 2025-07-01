@@ -68,6 +68,36 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Grok Prompt Enhancer API',
+    version: '1.0.0',
+    environment: NODE_ENV,
+    endpoints: {
+      health: 'GET /health',
+      enhance: 'POST /enhance'
+    },
+    documentation: 'This API provides prompt enhancement services using OpenRouter models.',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Grok Prompt Enhancer API',
+    version: '1.0.0',
+    environment: NODE_ENV,
+    endpoints: {
+      health: 'GET /health',
+      enhance: 'POST /enhance'
+    },
+    documentation: 'This API provides prompt enhancement services using OpenRouter models.',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Main enhancement endpoint
 app.post('/enhance', validateEnhancementRequest, async (req, res) => {
   const { prompt, model, enhancementType } = req.body;

@@ -9,6 +9,11 @@
   ],
   "routes": [
     {
+      "src": "/",
+      "dest": "app.js",
+      "methods": ["GET"]
+    },
+    {
       "src": "/health",
       "dest": "app.js",
       "methods": ["GET"]
