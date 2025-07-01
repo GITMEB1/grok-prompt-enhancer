@@ -12,7 +12,7 @@
       'textarea',
       'input[type="text"]'
     ],
-    backendUrl: 'https://your-vercel-url.vercel.app', // UPDATE THIS AFTER DEPLOYMENT
+    backendUrl: 'https://grok-prompt-enhancer.vercel.app', // Production deployment URL
     pollInterval: 1000,
     maxRetries: 10,
     uiId: 'grok-enhancer-container'

@@ -6,15 +6,34 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors({
+const corsOptions = {
   origin: [
     'https://grok.com',
     'chrome-extension://*',
     'http://localhost:3000',
     'http://localhost:3001'
   ],
-  credentials: true
-}));
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
+
+// Handle preflight requests for all routes
+app.options('*', cors(corsOptions));
+
+// Custom middleware to ensure CORS headers are always set
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://grok.com');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
