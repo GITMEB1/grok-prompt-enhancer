@@ -9,6 +9,11 @@
   ],
   "routes": [
     {
+      "src": "/",
+      "dest": "app.js",
+      "methods": ["GET"]
+    },
+    {
       "src": "/health",
       "dest": "app.js",
       "methods": ["GET"]
@@ -26,4 +31,4 @@
   "env": {
     "NODE_ENV": "production"
   }
-} 
+}
