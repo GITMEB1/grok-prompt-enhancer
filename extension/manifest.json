@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Grok Prompt Enhancer",
-  "version": "1.0.0",
-  "description": "Enhance your Grok prompts with AI-powered improvements for better responses",
+  "version": "2.0.0",
+  "description": "Enhance your Grok prompts with AI-powered optimization for Deep Research, Think Mode, and Quick Refine",
   "permissions": [
     "activeTab",
     "storage"
@@ -29,7 +29,7 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Grok Prompt Enhancer Settings"
+    "default_title": "Grok Prompt Enhancer - Choose Your Mode"
   },
   "web_accessible_resources": [
     {
