@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grok Prompt Enhancer Settings</title>
+  <title>Grok Prompt Enhancer</title>
   <style>
     * {
       margin: 0;
@@ -12,104 +12,200 @@
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: #ffffff;
     }
     
     .container {
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      width: 320px;
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      width: 380px;
       max-width: 90vw;
+      backdrop-filter: blur(20px);
     }
     
     .header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 32px;
     }
     
     .logo {
-      font-size: 24px;
-      margin-bottom: 8px;
+      font-size: 32px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 3s ease-in-out infinite;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
     
     h2 {
-      color: #1a1a1a;
-      font-size: 18px;
+      color: #ffffff;
+      font-size: 24px;
       font-weight: 700;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
     }
     
     .subtitle {
-      color: #666;
-      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
       line-height: 1.4;
     }
     
-    .form-group {
-      margin-bottom: 20px;
+    .options-container {
+      margin-bottom: 24px;
     }
     
-    label {
+    .section-title {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .option-card {
+      background: rgba(30, 30, 30, 0.8);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .option-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .option-card:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+    
+    .option-card:hover::before {
+      left: 100%;
+    }
+    
+    .option-card.selected {
+      border-color: #4ecdc4;
+      background: rgba(78, 205, 196, 0.1);
+      box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+    }
+    
+    .option-card.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #4ecdc4;
+      color: #000;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    .option-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
       display: block;
+    }
+    
+    .option-title {
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 600;
       margin-bottom: 8px;
-      font-weight: 600;
-      color: #333;
+    }
+    
+    .option-description {
+      color: rgba(255, 255, 255, 0.7);
       font-size: 14px;
+      line-height: 1.4;
+      margin-bottom: 8px;
     }
     
-    select {
+    .option-features {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 12px;
+      font-style: italic;
+    }
+    
+    .save-button {
       width: 100%;
-      padding: 12px 16px;
-      border: 2px solid #e1e5e9;
-      border-radius: 8px;
-      font-size: 14px;
-      background: white;
-      transition: all 0.2s;
-      cursor: pointer;
-    }
-    
-    select:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-    
-    select:hover {
-      border-color: #667eea;
-    }
-    
-    button {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      padding: 16px;
+      background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+      color: #000000;
       border: none;
-      border-radius: 8px;
-      font-size: 14px;
+      border-radius: 12px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(78, 205, 196, 0.3);
+      position: relative;
+      overflow: hidden;
     }
     
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    .save-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
     }
     
-    button:active {
+    .save-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(78, 205, 196, 0.4);
+    }
+    
+    .save-button:hover::before {
+      left: 100%;
+    }
+    
+    .save-button:active {
       transform: translateY(0);
     }
     
-    button:disabled {
-      background: #6c757d;
+    .save-button:disabled {
+      background: rgba(100, 100, 100, 0.3);
+      color: rgba(255, 255, 255, 0.5);
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
@@ -117,68 +213,80 @@
     
     .status {
       margin-top: 16px;
-      padding: 12px;
+      padding: 12px 16px;
       border-radius: 8px;
-      font-size: 12px;
+      font-size: 14px;
       text-align: center;
       font-weight: 500;
       display: none;
+      backdrop-filter: blur(10px);
     }
     
     .status.success {
-      background: #f0fff4;
-      color: #2f855a;
-      border: 1px solid #c6f6d5;
+      background: rgba(78, 205, 196, 0.2);
+      color: #4ecdc4;
+      border: 1px solid rgba(78, 205, 196, 0.3);
     }
     
     .status.error {
-      background: #fee;
-      color: #c53030;
-      border: 1px solid #fed7d7;
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
+      border: 1px solid rgba(255, 107, 107, 0.3);
     }
     
     .info {
-      margin-top: 20px;
-      padding: 16px;
-      background: #f8f9fa;
-      border: 1px solid #e9ecef;
-      border-radius: 8px;
-      font-size: 12px;
-      color: #495057;
+      margin-top: 24px;
+      padding: 20px;
+      background: rgba(40, 40, 40, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.8);
       line-height: 1.5;
+      backdrop-filter: blur(10px);
     }
     
     .info h4 {
-      margin-bottom: 8px;
-      color: #212529;
-      font-size: 13px;
+      margin-bottom: 12px;
+      color: #ffffff;
+      font-size: 15px;
       font-weight: 600;
     }
     
-    .info ul {
-      list-style: none;
-      padding-left: 0;
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
     }
     
-    .info li {
+    .info-item {
+      padding: 12px;
+      background: rgba(50, 50, 50, 0.5);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .info-item-title {
+      color: #4ecdc4;
+      font-weight: 600;
       margin-bottom: 4px;
-      padding-left: 16px;
-      position: relative;
+      font-size: 12px;
     }
     
-    .info li:before {
-      content: "•";
-      color: #667eea;
-      font-weight: bold;
-      position: absolute;
-      left: 0;
-    }
-    
-    .model-info {
-      margin-top: 8px;
+    .info-item-desc {
+      color: rgba(255, 255, 255, 0.7);
       font-size: 11px;
-      color: #6c757d;
-      font-style: italic;
+      line-height: 1.3;
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
     }
   </style>
 </head>
@@ -187,41 +295,60 @@
     <div class="header">
       <div class="logo">⚡</div>
       <h2>Grok Prompt Enhancer</h2>
-      <div class="subtitle">AI-powered prompt improvement</div>
+      <div class="subtitle">Choose your AI interaction mode</div>
     </div>
     
-    <div class="form-group">
-      <label for="model-select">🤖 AI Model:</label>
-      <select id="model-select">
-        <option value="deepseek/deepseek-r1">DeepSeek R1 (Latest)</option>
-        <option value="deepseek/deepseek-coder">DeepSeek Coder</option>
-        <option value="openai/gpt-4o">GPT-4o</option>
-        <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet</option>
-        <option value="google/gemini-2.0-flash-exp">Gemini 2.0 Flash</option>
-        <option value="meta-llama/llama-3.1-70b-instruct">Llama 3.1 70B</option>
-        <option value="mistralai/mistral-7b-instruct">Mistral 7B</option>
-      </select>
-      <div class="model-info">Choose the AI model for prompt enhancement</div>
+    <div class="options-container">
+      <div class="section-title">Select Enhancement Mode</div>
+      
+      <div class="option-card" data-mode="deep-research">
+        <span class="option-icon">🔍</span>
+        <div class="option-title">Deep Research</div>
+        <div class="option-description">Comprehensive analysis with web search and detailed insights</div>
+        <div class="option-features">• Real-time web data • Multiple sources • In-depth analysis</div>
+      </div>
+      
+      <div class="option-card" data-mode="think-mode">
+        <span class="option-icon">🧠</span>
+        <div class="option-title">Think Mode</div>
+        <div class="option-description">Advanced reasoning with step-by-step problem solving</div>
+        <div class="option-features">• Logical reasoning • Step-by-step analysis • Context-aware</div>
+      </div>
+      
+      <div class="option-card" data-mode="quick-refine">
+        <span class="option-icon">⚡</span>
+        <div class="option-title">Quick Refine</div>
+        <div class="option-description">Fast prompt optimization for immediate improvements</div>
+        <div class="option-features">• Instant enhancement • Clarity focused • Time efficient</div>
+      </div>
     </div>
     
-    <button id="save-btn">💾 Save Settings</button>
+    <button id="save-btn" class="save-button" disabled>
+      💾 Save Preference
+    </button>
     
     <div id="status" class="status"></div>
     
     <div class="info">
-      <h4>🚀 How to use:</h4>
-      <ul>
-        <li>Visit grok.com</li>
-        <li>Enter your prompt</li>
-        <li>Click "Enhance Prompt"</li>
-        <li>Choose enhancement type</li>
-      </ul>
-      
-      <h4 style="margin-top: 12px;">💡 Enhancement Types:</h4>
-      <ul>
-        <li><strong>Quick:</strong> Simple clarity improvements</li>
-        <li><strong>Advanced:</strong> Detailed analysis & context</li>
-      </ul>
+      <h4>🚀 How it works:</h4>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-item-title">Step 1</div>
+          <div class="info-item-desc">Visit grok.com and enter your prompt</div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-title">Step 2</div>
+          <div class="info-item-desc">Click the "Enhance" button that appears</div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-title">Step 3</div>
+          <div class="info-item-desc">Your chosen mode enhances the prompt</div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-title">Step 4</div>
+          <div class="info-item-desc">Get better, more targeted results</div>
+        </div>
+      </div>
     </div>
   </div>
   

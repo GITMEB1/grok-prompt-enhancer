@@ -1,79 +1,59 @@
 // Grok Prompt Enhancer Popup Script
 document.addEventListener('DOMContentLoaded', function() {
-  const modelSelect = document.getElementById('model-select');
+  const optionCards = document.querySelectorAll('.option-card');
   const saveBtn = document.getElementById('save-btn');
   const statusDiv = document.getElementById('status');
+  
+  let selectedMode = null;
 
-  // Model information for tooltips
-  const modelInfo = {
-    'deepseek/deepseek-r1': {
-      name: 'DeepSeek R1',
-      description: 'Latest DeepSeek model with advanced reasoning capabilities',
-      speed: 'Fast',
-      cost: 'Low'
+  // Mode information for enhanced prompt crafting
+  const modeInfo = {
+    'deep-research': {
+      name: 'Deep Research',
+      description: 'Comprehensive analysis with web search capabilities',
+      prompt_prefix: 'Conduct thorough research on this topic with multiple sources and provide detailed analysis:',
+      features: ['Real-time web data', 'Multiple sources', 'In-depth analysis', 'Citation support']
     },
-    'deepseek/deepseek-coder': {
-      name: 'DeepSeek Coder',
-      description: 'Specialized for coding tasks, great for technical prompts',
-      speed: 'Fast',
-      cost: 'Low'
+    'think-mode': {
+      name: 'Think Mode',
+      description: 'Advanced reasoning with step-by-step problem solving',
+      prompt_prefix: 'Think through this step-by-step with logical reasoning and provide a detailed analysis:',
+      features: ['Logical reasoning', 'Step-by-step analysis', 'Context-aware', 'Problem decomposition']
     },
-    'openai/gpt-4o': {
-      name: 'GPT-4o',
-      description: 'Most capable model, excellent for complex reasoning',
-      speed: 'Medium',
-      cost: 'High'
-    },
-    'anthropic/claude-3.5-sonnet': {
-      name: 'Claude 3.5 Sonnet',
-      description: 'Balanced performance, good for general tasks',
-      speed: 'Fast',
-      cost: 'Medium'
-    },
-    'google/gemini-2.0-flash-exp': {
-      name: 'Gemini 2.0 Flash',
-      description: 'Fast and efficient, good for quick enhancements',
-      speed: 'Very Fast',
-      cost: 'Low'
-    },
-    'meta-llama/llama-3.1-70b-instruct': {
-      name: 'Llama 3.1 70B',
-      description: 'Open source model, good general performance',
-      speed: 'Medium',
-      cost: 'Low'
-    },
-    'mistralai/mistral-7b-instruct': {
-      name: 'Mistral 7B',
-      description: 'Lightweight and fast, good for simple tasks',
-      speed: 'Very Fast',
-      cost: 'Very Low'
+    'quick-refine': {
+      name: 'Quick Refine',
+      description: 'Fast prompt optimization for immediate improvements',
+      prompt_prefix: 'Quickly enhance and clarify this prompt for better results:',
+      features: ['Instant enhancement', 'Clarity focused', 'Time efficient', 'Concise output']
     }
   };
 
-  // Load saved model
-  function loadSavedModel() {
-    chrome.storage.sync.get('selectedModel', function(data) {
-      if (data.selectedModel) {
-        modelSelect.value = data.selectedModel;
-        updateModelInfo();
+  // Load saved mode
+  function loadSavedMode() {
+    chrome.storage.sync.get('selectedMode', function(data) {
+      if (data.selectedMode) {
+        selectedMode = data.selectedMode;
+        updateSelection();
       }
     });
   }
 
-  // Update model information display
-  function updateModelInfo() {
-    const selectedModel = modelSelect.value;
-    const info = modelInfo[selectedModel];
-    
-    if (info) {
-      const modelInfoEl = document.querySelector('.model-info');
-      if (modelInfoEl) {
-        modelInfoEl.innerHTML = `
-          <strong>${info.name}</strong><br>
-          ${info.description}<br>
-          Speed: ${info.speed} | Cost: ${info.cost}
-        `;
+  // Update visual selection
+  function updateSelection() {
+    optionCards.forEach(card => {
+      card.classList.remove('selected');
+      if (card.dataset.mode === selectedMode) {
+        card.classList.add('selected');
       }
+    });
+    
+    // Enable save button if mode is selected
+    saveBtn.disabled = !selectedMode;
+    
+    if (selectedMode) {
+      saveBtn.textContent = `💾 Save ${modeInfo[selectedMode].name}`;
+    } else {
+      saveBtn.textContent = '💾 Save Preference';
     }
   }
 
@@ -83,32 +63,47 @@ document.addEventListener('DOMContentLoaded', function() {
     statusDiv.className = `status ${type}`;
     statusDiv.style.display = 'block';
     
+    // Add pulse animation for success
+    if (type === 'success') {
+      statusDiv.classList.add('pulse');
+    }
+    
     // Auto-hide after 3 seconds
     setTimeout(() => {
       statusDiv.style.display = 'none';
+      statusDiv.classList.remove('pulse');
     }, 3000);
   }
 
   // Save settings
   function saveSettings() {
-    const selectedModel = modelSelect.value;
+    if (!selectedMode) {
+      showStatus('❌ Please select an enhancement mode first', 'error');
+      return;
+    }
     
     // Disable button during save
     saveBtn.disabled = true;
     saveBtn.textContent = '💾 Saving...';
     
-    chrome.storage.sync.set({ selectedModel: selectedModel }, function() {
+    const modeData = {
+      selectedMode: selectedMode,
+      modeInfo: modeInfo[selectedMode]
+    };
+    
+    chrome.storage.sync.set(modeData, function() {
       if (chrome.runtime.lastError) {
         showStatus('❌ Failed to save settings: ' + chrome.runtime.lastError.message, 'error');
       } else {
-        showStatus('✅ Settings saved successfully!', 'success');
+        showStatus(`✅ ${modeInfo[selectedMode].name} mode saved successfully!`, 'success');
         
         // Update all tabs with the extension
         chrome.tabs.query({ url: 'https://grok.com/*' }, function(tabs) {
           tabs.forEach(tab => {
             chrome.tabs.sendMessage(tab.id, { 
               action: 'settingsUpdated', 
-              model: selectedModel 
+              mode: selectedMode,
+              modeInfo: modeInfo[selectedMode]
             }).catch(() => {
               // Ignore errors if content script isn't loaded
             });
@@ -117,13 +112,54 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Re-enable button
-      saveBtn.disabled = false;
-      saveBtn.textContent = '💾 Save Settings';
+      updateSelection();
+    });
+  }
+
+  // Handle option card clicks
+  function handleCardSelection(e) {
+    const card = e.currentTarget;
+    const mode = card.dataset.mode;
+    
+    // Remove previous selection
+    optionCards.forEach(c => c.classList.remove('selected'));
+    
+    // Add selection to clicked card
+    card.classList.add('selected');
+    selectedMode = mode;
+    
+    // Update save button
+    updateSelection();
+    
+    // Add selection animation
+    card.style.transform = 'scale(1.02)';
+    setTimeout(() => {
+      card.style.transform = '';
+    }, 150);
+  }
+
+  // Add hover effects for cards
+  function addCardHoverEffects() {
+    optionCards.forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        if (!this.classList.contains('selected')) {
+          this.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+        }
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        if (!this.classList.contains('selected')) {
+          this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        }
+      });
     });
   }
 
   // Event listeners
-  modelSelect.addEventListener('change', updateModelInfo);
+  optionCards.forEach(card => {
+    card.addEventListener('click', handleCardSelection);
+  });
+  
   saveBtn.addEventListener('click', saveSettings);
 
   // Keyboard shortcuts
@@ -134,38 +170,79 @@ document.addEventListener('DOMContentLoaded', function() {
       saveSettings();
     }
     
-    // Enter to save when select is focused
-    if (e.key === 'Enter' && document.activeElement === modelSelect) {
+    // Number keys to select modes (1, 2, 3)
+    if (e.key >= '1' && e.key <= '3') {
+      const modeIndex = parseInt(e.key) - 1;
+      const modes = ['deep-research', 'think-mode', 'quick-refine'];
+      if (modes[modeIndex]) {
+        selectedMode = modes[modeIndex];
+        updateSelection();
+      }
+    }
+    
+    // Enter to save when a mode is selected
+    if (e.key === 'Enter' && selectedMode) {
       saveSettings();
+    }
+    
+    // Escape to clear selection
+    if (e.key === 'Escape') {
+      selectedMode = null;
+      updateSelection();
     }
   });
 
-  // Initialize
-  loadSavedModel();
-  updateModelInfo();
-
-  // Add some helpful animations
-  saveBtn.addEventListener('mouseenter', function() {
-    this.style.transform = 'translateY(-1px)';
-  });
-
-  saveBtn.addEventListener('mouseleave', function() {
-    this.style.transform = 'translateY(0)';
-  });
-
-  // Add model selection animation
-  modelSelect.addEventListener('change', function() {
-    this.style.transform = 'scale(1.02)';
+  // Add smooth animations
+  function addAnimations() {
+    // Stagger card animations on load
+    optionCards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      
+      setTimeout(() => {
+        card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, index * 100);
+    });
+    
+    // Animate save button
     setTimeout(() => {
-      this.style.transform = 'scale(1)';
-    }, 150);
-  });
+      saveBtn.style.opacity = '0';
+      saveBtn.style.transform = 'translateY(20px)';
+      saveBtn.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+      
+      setTimeout(() => {
+        saveBtn.style.opacity = '1';
+        saveBtn.style.transform = 'translateY(0)';
+      }, 50);
+    }, 300);
+  }
+
+  // Initialize
+  loadSavedMode();
+  addCardHoverEffects();
+  addAnimations();
 
   // Show welcome message on first load
   chrome.storage.sync.get('firstLoad', function(data) {
     if (!data.firstLoad) {
-      showStatus('🎉 Welcome to Grok Prompt Enhancer!', 'success');
+      setTimeout(() => {
+        showStatus('🎉 Welcome to the new Grok experience!', 'success');
+      }, 1000);
       chrome.storage.sync.set({ firstLoad: true });
     }
   });
+
+  // Add tooltip functionality for mode cards
+  function addTooltips() {
+    optionCards.forEach(card => {
+      const mode = card.dataset.mode;
+      const info = modeInfo[mode];
+      
+      card.title = `${info.name}: ${info.description}\nFeatures: ${info.features.join(', ')}`;
+    });
+  }
+
+  addTooltips();
 }); 
