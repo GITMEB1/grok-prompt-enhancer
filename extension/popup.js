@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const optionCards = document.querySelectorAll('.option-card');
   const saveBtn = document.getElementById('save-btn');
   const statusDiv = document.getElementById('status');
+  const closeBtn = document.querySelector('.close-btn');
   
   let selectedMode = null;
 
@@ -161,6 +162,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   saveBtn.addEventListener('click', saveSettings);
+
+  closeBtn.addEventListener('click', function() {
+    window.close();
+  });
 
   // Keyboard shortcuts
   document.addEventListener('keydown', function(e) {
