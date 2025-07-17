@@ -32,6 +32,27 @@
       width: 380px;
       max-width: 90vw;
       backdrop-filter: blur(20px);
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 24px;
+      color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .close-btn:hover,
+    .close-btn:focus {
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+
+    .close-btn:active {
+      transform: scale(0.95);
     }
     
     .header {
@@ -292,6 +313,7 @@
 </head>
 <body>
   <div class="container">
+    <span class="close-btn">&times;</span>
     <div class="header">
       <div class="logo">⚡</div>
       <h2>Grok Prompt Enhancer</h2>
